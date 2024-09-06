@@ -350,7 +350,7 @@
 	<!-- Fetch Calculation Form moved here -->
 	<form id="fetchCalculationForm">
 	    <label for="fetchCalculationID"><span id="labelFetchCalculationID">Enter ID</span>:</label>
-	    <input type="text" id="fetchCalculationID" name="fetchCalculationID" placeholder="Enter ID">
+	    <input type="text" id="fetchCalculationID" name="fetchCalculationID" placeholder="ID">
             <button type="button" id="fetchButton"><span id="fetchButtonText">Get Info</span></button>
 	</form>
 
@@ -395,7 +395,7 @@
                 exchangeRateLabel: "Курс Oбмена:",
                 calculateButtonText: "Рассчитать",
         	labelFetchCalculationID: "Введите ID", // Added
-        	fetchButtonText: "Получить информацию", // Added
+        	fetchButtonText: "Получить Информацию", // Added
                 error: "Ошибка",
                 result: "Результат",
                 selectDealer: "Выберите Дилера",
@@ -409,8 +409,8 @@
                 labelInternetLink: "Link",
                 exchangeRateLabel: "Məzənnə:",
                 calculateButtonText: "Hesabla",
-        	labelFetchCalculationID: "ID daxil edin", // Added
-        	fetchButtonText: "Məlumat alın", // Added
+        	labelFetchCalculationID: "ID Daxil Edin", // Added
+        	fetchButtonText: "Daxil Et", // Added
                 error: "Xəta",
                 result: "Nəticə",
                 selectDealer: "Satıcını Seçin",
@@ -468,8 +468,19 @@
 
         const formatNumber = (number) => new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format(Math.round(number));
         const formatCurrency = (number, symbol) => `${symbol}${formatNumber(number)}`;
+     
 
-        const generateUniqueID = () => Math.floor(Math.random() * 1000000);
+	// Function to generate a random alphanumeric ID with 9 characters (letters and numbers)
+        const generateUniqueID = () => {
+            const characters = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
+            let result = '';
+            const length = 7; // Maximum length of 7 characters
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        };
+
 
         const validateForm = () => {
             let isValid = true;
