@@ -663,30 +663,32 @@
         document.getElementById('calculateButton').addEventListener('click', calculatePrice);
 
         document.querySelectorAll('.number-pad-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const D2Input = document.getElementById('D2');
-                const F2Select = document.getElementById('F2');
-                const internetLinkInput = document.getElementById('internetLink');
-                const calcIDElement = document.getElementById('calculationID');
-		const fetchCalculationIDInput = document.getElementById('fetchCalculationID');
-                const value = button.textContent;
-
-                if (value === '←') {
-                    D2Input.value = D2Input.value.slice(0, -1);
-                } else if (value === 'C') {
-                    D2Input.value = '';
-                    F2Select.value = '';
-                    internetLinkInput.value = '';
-                    calcIDElement.textContent = '0';
-		    fetchCalculationIDInput.value = '';
-
-                    document.getElementById('priceContainer').classList.add('hidden');
-                    document.getElementById('priceValue').textContent = '$0';
-                } else {
-                    D2Input.value += value;
-                }
-            });
-        });
+	    button.addEventListener('click', () => {
+	        const D2Input = document.getElementById('D2');
+	        const F2Select = document.getElementById('F2');
+	        const internetLinkInput = document.getElementById('internetLink');
+	        const calcIDElement = document.getElementById('calculationID');
+	        const fetchCalculationIDInput = document.getElementById('fetchCalculationID'); // Assuming a new input field for fetching by ID
+	        const value = button.textContent;
+	
+	        if (value === '←') {
+	            D2Input.value = D2Input.value.slice(0, -1); // Backspace functionality
+	        } else if (value === 'C') {
+	            // Clear all the fields
+	            D2Input.value = '';
+	            F2Select.value = '';
+	            internetLinkInput.value = '';
+	            calcIDElement.textContent = '0';
+	            fetchCalculationIDInput.value = ''; // Reset additional input fields (if any)
+	
+	            // Hide the price container and reset price value
+	            document.getElementById('priceContainer').classList.add('hidden');
+	            document.getElementById('priceValue').textContent = '$0'; // Reset price to $0
+	        } else {
+	            D2Input.value += value; // Append clicked number to the input
+	        }
+	    });
+	});
 
         // Function to fetch data from Google Sheets based on Calculation ID
         const fetchDataFromGoogleSheet = async (calculationId) => {
