@@ -526,13 +526,13 @@
         };
 
         // Function to send data to Google Sheets, including user local timestamp
-        const sendDataToGoogleSheet = async (carPrice, dealer, link, calculatedPrice, exchangeRate, calculationId) => {
+        const sendDataToGoogleSheet = async (carPrice, dealer, link, calculatedPrice, rawExchangeRate, calculationId) => {
             const numberOfDigits = carPrice.toString().replace(/[^0-9]/g, '').length;
             const convertedCarPrice = numberOfDigits < 7 ? carPrice * 10000 : carPrice;
 
             const formattedCarPrice = `₩${formatNumber(convertedCarPrice)}`;
             const formattedPrice = `$${formatNumber(calculatedPrice)}`;
-            const formattedExchangeRate = formatCurrency(exchangeRate, '₩');
+            const formattedRawExchangeRate = formatCurrency(rawExchangeRate, '₩');
 
             const formatDate = (date) => {
 		const day = String(date.getDate()).padStart(2, '0');
@@ -549,7 +549,7 @@
                 dealer: dealer,
                 link: link,
                 calculatedPrice: formattedPrice,
-                exchangeRate: formattedExchangeRate, 
+                exchangeRate: formattedRawExchangeRate, // Send raw exchange rate
                 calculationId: calculationId,
                 timestamp: timestamp 
             };
@@ -652,7 +652,7 @@
                 const calcIDElement = document.getElementById('calculationID');
                 calcIDElement.textContent = `${uniqueID}`;
 
-                sendDataToGoogleSheet(D2, F2, internetLink, finalPriceUSD, KRWUSD, uniqueID);
+                sendDataToGoogleSheet(D2, F2, internetLink, finalPriceUSD, rawExchangeRate, uniqueID);
 
             } catch (error) {
                 console.error('Error fetching exchange rates:', error);
