@@ -600,11 +600,12 @@
                 if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
 
-		// Fetch KRW/USD rate and apply a 15₩ subtraction
-    		let KRWUSD = data.conversion_rates.KRW;
-   		KRWUSD -= 4; //
+		// Fetch KRW/USD rate
+        	const rawExchangeRate = data.conversion_rates.KRW;
+        	const adjustedExchangeRate = rawExchangeRate - 12; // Subtract 4 KRW for calculations
 
-                const adjustedBasePriceUSD = adjustedBasePrice / KRWUSD;
+
+                const adjustedBasePriceUSD = adjustedBasePrice / adjustedExchangeRate;
 
                 const options = {
                     "Endirimli (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
@@ -636,9 +637,10 @@
                 document.getElementById('priceValue').textContent = `$${formattedPrice}`;
                 document.getElementById('result').classList.remove('error');
 
-                const formattedExchangeRate = formatCurrency(KRWUSD, '₩');
-                document.getElementById('exchangeRate').textContent = formattedExchangeRate;
-
+                // Display raw exchange rate
+        	const formattedRawExchangeRate = formatCurrency(rawExchangeRate, '₩');
+        	document.getElementById('exchangeRate').textContent = formattedRawExchangeRate;
+	
                 const checkmark = document.getElementById('checkmark');
                 checkmark.classList.remove('hidden');
 
