@@ -567,102 +567,114 @@
         };
 
         const calculatePrice = async () => {
-            if (!validateForm()) {
-                return;
-            }
+	    if (!validateForm()) {
+	        return;
+	    }
 
-            const D2Input = document.getElementById('D2');
-            const F2Select = document.getElementById('F2');
-            const internetLinkInput = document.getElementById('internetLink');
-            const D2 = parseFloat(D2Input.value);
-            const F2 = F2Select.value;
-            const internetLink = internetLinkInput.value.trim();
+	    const D2Input = document.getElementById('D2');
+	    const F2Select = document.getElementById('F2');
+	    const internetLinkInput = document.getElementById('internetLink');
+	    const D2 = parseFloat(D2Input.value);
+	    const F2 = F2Select.value;
+	    const internetLink = internetLinkInput.value.trim();
 
-            if (!F2) {
-                return;
-            }
+	    if (!F2) {
+	        return;
+	    }
 
-            if (isNaN(D2) || D2 <= 0) {
-                document.getElementById('priceValue').textContent = '$0';
-                document.getElementById('result').classList.add('error');
-                document.getElementById('exchangeRate').textContent = '₩0';
-                return;
-            }
+	    if (isNaN(D2) || D2 <= 0) {
+	        document.getElementById('priceValue').textContent = '$0';
+	        document.getElementById('result').classList.add('error');
+	        document.getElementById('exchangeRate').textContent = '₩0';
+	        return;
+	    }
 
-            const numberOfDigits = D2.toString().replace(/[^0-9]/g, '').length;
-            const adjustedBasePrice = numberOfDigits < 7 ? D2 * 10000 : D2;
+	    const numberOfDigits = D2.toString().replace(/[^0-9]/g, '').length;
+	    const adjustedBasePrice = numberOfDigits < 7 ? D2 * 10000 : D2;
 
-            let KRWUSD = 0;
+	    try {
+	        const apiKey = 'f5106c228dd6e51b2d42b7f5';
+	        const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`);
+	        if (!response.ok) throw new Error('Network response was not ok');
+	        const data = await response.json();
 
-            try {
-                const apiKey = 'f5106c228dd6e51b2d42b7f5';
-                const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`);
-                if (!response.ok) throw new Error('Network response was not ok');
-                const data = await response.json();
+	        // Fetch KRW/USD rate
+	        const rawExchangeRate = data.conversion_rates.KRW;
 
-		// Fetch KRW/USD rate
-        	const rawExchangeRate = data.conversion_rates.KRW;
-        	const adjustedExchangeRate = rawExchangeRate - 15; // Subtract 15 KRW for calculations
+	        // Dealer-specific exchange rate adjustments
+	        const dealerExchangeRateAdjustments = {
+	            "Endirimli (KR)": 15,
+	            "Qabil Güləhmdzadə (KR)": 10,
+	            "Süleyman Yusubov (KR)": 12,
+	            "Anar Bəylər (KR)": 15,
+	            "Müseyib Məhərrəmli (KR)": 12,
+	            "AvtoAL (KR)": 5,
+	            "Koreacars.az (KR)": 15,
+	            "Koreya055 (KR)": 12,
+	            "EncarAz (KR)": 10,
+	            "Nazim Əliyev (KR)": 10,
+	            "Caspian Global (KR)": 5,
+	        };
 
+	        // Apply individual adjustment per dealer
+	        const adjustedExchangeRate = rawExchangeRate - (dealerExchangeRateAdjustments[F2] || 5);
 
-                const adjustedBasePriceUSD = adjustedBasePrice / adjustedExchangeRate;
+	        const adjustedBasePriceUSD = adjustedBasePrice / adjustedExchangeRate;
 
-                const options = {
-                    "Endirimli (KR)": { feeUnder20k: 0.025, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 150 },
-                    "Qabil Güləhmdzadə (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
-                    "Süleyman Yusubov (KR)": { feeUnder20k: 0.03, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
-		    "Anar Bəylər (KR)": { feeUnder20k: 0.02, feeOver20k: 0.03, adjustmentUnder20k: 350, adjustmentOver20k: 150 },
-                    "Müseyib Məhərrəmli (KR)": { feeUnder20k: 0.025, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
-                    "AvtoAL (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
-		    "Koreacars.az (KR)": { feeUnder20k: 0.03, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
-		    "Koreya055 (KR)": { feeUnder20k: 0.03, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 100 },
-		    "EncarAz (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 100 },
-                    "Nazim Əliyev (KR)": { feeUnder20k: 0.03, feeOver20k: 0.03, adjustmentUnder20k: 350, adjustmentOver20k: 100 },
-		    "Caspian Global (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
-                };
+	        const options = {
+	            "Endirimli (KR)": { feeUnder20k: 0.025, feeOver20k: 0.035, adjustmentUnder20k: 300, adjustmentOver20k: 150 },
+	            "Qabil Güləhmdzadə (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
+	            "Süleyman Yusubov (KR)": { feeUnder20k: 0.03, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
+	            "Anar Bəylər (KR)": { feeUnder20k: 0.025, feeOver20k: 0.03, adjustmentUnder20k: 350, adjustmentOver20k: 150 },
+	            "Müseyib Məhərrəmli (KR)": { feeUnder20k: 0.025, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
+	            "AvtoAL (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 0 },
+	            "Koreacars.az (KR)": { feeUnder20k: 0.03, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
+	            "Koreya055 (KR)": { feeUnder20k: 0.03, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 100 },
+	            "EncarAz (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 100 },
+	            "Nazim Əliyev (KR)": { feeUnder20k: 0.03, feeOver20k: 0.03, adjustmentUnder20k: 350, adjustmentOver20k: 100 },
+	            "Caspian Global (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 0 },
+	        };
 
-                const selectedOption = options[F2];
-                if (!selectedOption) {
-                    console.error('Invalid customer option selected');
-                    return;
-                }
+	        const selectedOption = options[F2];
+	        if (!selectedOption) {
+	            console.error('Invalid customer option selected');
+	            return;
+	        }
 
-                const feePercent = adjustedBasePriceUSD < 20000 ? selectedOption.feeUnder20k : selectedOption.feeOver20k;
-                const adjustment = adjustedBasePriceUSD < 20000 ? selectedOption.adjustmentUnder20k : selectedOption.adjustmentOver20k;
+	        const feePercent = adjustedBasePriceUSD < 20000 ? selectedOption.feeUnder20k : selectedOption.feeOver20k;
+	        const adjustment = adjustedBasePriceUSD < 20000 ? selectedOption.adjustmentUnder20k : selectedOption.adjustmentOver20k;
 
-                const feeAmount = adjustedBasePriceUSD / 1.1 * feePercent;
-                let finalPriceUSD = adjustedBasePriceUSD - feeAmount + adjustment;
+	        const feeAmount = adjustedBasePriceUSD / 1.1 * feePercent;
+	        let finalPriceUSD = adjustedBasePriceUSD - feeAmount + adjustment;
 
-                const formattedPrice = formatNumber(finalPriceUSD);
-                document.getElementById('priceValue').textContent = `$${formattedPrice}`;
-                document.getElementById('result').classList.remove('error');
+	        const formattedPrice = formatNumber(finalPriceUSD);
+	        document.getElementById('priceValue').textContent = `$${formattedPrice}`;
+	        document.getElementById('result').classList.remove('error');
 
-                // Display raw exchange rate
-        	const formattedRawExchangeRate = formatCurrency(rawExchangeRate, '₩');
-        	document.getElementById('exchangeRate').textContent = formattedRawExchangeRate;
-	
-                const checkmark = document.getElementById('checkmark');
-                checkmark.classList.remove('hidden');
+	        // Display raw exchange rate
+	        document.getElementById('exchangeRate').textContent = formatCurrency(rawExchangeRate, '₩');
 
-                setTimeout(() => {
-                    checkmark.classList.add('hidden');
-                }, 500);
+	        const checkmark = document.getElementById('checkmark');
+	        checkmark.classList.remove('hidden');
 
-                const uniqueID = generateUniqueID();
-                const calcIDElement = document.getElementById('calculationID');
-                calcIDElement.textContent = `${uniqueID}`;
+	        setTimeout(() => {
+	            checkmark.classList.add('hidden');
+	        }, 500);
 
-                sendDataToGoogleSheet(D2, F2, internetLink, finalPriceUSD, rawExchangeRate, uniqueID);
+	        const uniqueID = generateUniqueID();
+	        const calcIDElement = document.getElementById('calculationID');
+	        calcIDElement.textContent = `${uniqueID}`;
 
-            } catch (error) {
-                console.error('Error fetching exchange rates:', error);
-                document.getElementById('priceValue').textContent = 'Error';
-                document.getElementById('result').classList.add('error');
-                document.getElementById('exchangeRate').textContent = 'Error';
-            }
+	        sendDataToGoogleSheet(D2, F2, internetLink, finalPriceUSD, adjustedExchangeRate, uniqueID);
+	    } catch (error) {
+	        console.error('Error fetching exchange rates:', error);
+	        document.getElementById('priceValue').textContent = 'Error';
+	        document.getElementById('result').classList.add('error');
+	        document.getElementById('exchangeRate').textContent = 'Error';
+	    }
 
-            document.getElementById('priceContainer').classList.remove('hidden');
-        };
+	    document.getElementById('priceContainer').classList.remove('hidden');
+	};
 
         document.getElementById('calculateButton').addEventListener('click', calculatePrice);
 
