@@ -604,18 +604,18 @@
 
 	        // Dealer-specific exchange rate adjustments
 	        const dealerExchangeRateAdjustments = {
-	            "Endirimli (KR)": 15,
-	            "Qabil Güləhmdzadə (KR)": 10,
-		    "KoreAuto (KR)": 10,
-	            "Süleyman Yusubov (KR)": 12,
-	            "Anar Bəylər (KR)": 10,
-	            "Müseyib Məhərrəmli (KR)": 12,
-	            "AvtoAL (KR)": 8,
-	            "Koreacars.az (KR)": 10,
-	            "Koreya055 (KR)": 12,
-	            "EncarAz (KR)": 10,
-	            "Nazim Əliyev (KR)": 10,
-	            "Caspian Global (KR)": 8,
+	            "Endirimli (KR)": 5,
+	            "Qabil Güləhmdzadə (KR)": 5,
+		    "KoreAuto (KR)": 5,
+	            "Süleyman Yusubov (KR)": 5,
+	            "Anar Bəylər (KR)": 5,
+	            "Müseyib Məhərrəmli (KR)": 5,
+	            "AvtoAL (KR)": 5,
+	            "Koreacars.az (KR)": 5,
+	            "Koreya055 (KR)": 5,
+	            "EncarAz (KR)": 5,
+	            "Nazim Əliyev (KR)": 5,
+	            "Caspian Global (KR)": 5,
 	        };
 
 	        // Apply individual adjustment per dealer
@@ -624,18 +624,18 @@
 	        const adjustedBasePriceUSD = adjustedBasePrice / adjustedExchangeRate;
 
 	        const options = {
-	            "Endirimli (KR)": { feeUnder20k: 0.025, feeOver20k: 0.035, adjustmentUnder20k: 300, adjustmentOver20k: 150 },
-	            "Qabil Güləhmdzadə (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
-		    "KoreAuto (KR)": { feeUnder20k: 0.02, feeOver20k: 0.02, adjustmentUnder20k: 250, adjustmentOver20k: 100 },
-	            "Süleyman Yusubov (KR)": { feeUnder20k: 0.03, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
-	            "Anar Bəylər (KR)": { feeUnder20k: 0.025, feeOver20k: 0.03, adjustmentUnder20k: 350, adjustmentOver20k: 150 },
-	            "Müseyib Məhərrəmli (KR)": { feeUnder20k: 0.025, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 50 },
-	            "AvtoAL (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 0 },
-	            "Koreacars.az (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 0 },
-	            "Koreya055 (KR)": { feeUnder20k: 0.03, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 100 },
-	            "EncarAz (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 100 },
-	            "Nazim Əliyev (KR)": { feeUnder20k: 0.03, feeOver20k: 0.03, adjustmentUnder20k: 350, adjustmentOver20k: 100 },
-	            "Caspian Global (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 250, adjustmentOver20k: 0 },
+	            "Endirimli (KR)": { feeUnder20k: 0.025, feeOver20k: 0.035, adjustmentUnder20k: 250, adjustmentOver20k: 100 },
+	            "Qabil Güləhmdzadə (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 200, adjustmentOver20k: 50 },
+		    "KoreAuto (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 200, adjustmentOver20k: 50 },
+	            "Süleyman Yusubov (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 200, adjustmentOver20k: 50 },
+	            "Anar Bəylər (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 200, adjustmentOver20k: 50 },
+	            "Müseyib Məhərrəmli (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 200, adjustmentOver20k: 50 },
+	            "AvtoAL (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 200, adjustmentOver20k: 50 },
+	            "Koreacars.az (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 200, adjustmentOver20k: 50 },
+	            "Koreya055 (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 200, adjustmentOver20k: 50 },
+	            "EncarAz (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 200, adjustmentOver20k: 50 },
+	            "Nazim Əliyev (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 200, adjustmentOver20k: 50 },
+	            "Caspian Global (KR)": { feeUnder20k: 0.03, feeOver20k: 0.04, adjustmentUnder20k: 200, adjustmentOver20k: 50 },
 	        };
 
 	        const selectedOption = options[F2];
